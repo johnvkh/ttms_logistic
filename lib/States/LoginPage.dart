@@ -10,6 +10,7 @@ import 'package:ttms_logistic/Model/StaffModel.dart';
 import 'package:ttms_logistic/Model/UserModel.dart';
 import 'package:ttms_logistic/ProviderClass/StaffProviderModel.dart';
 import 'package:ttms_logistic/States/HomePage.dart';
+import 'package:ttms_logistic/Utility/Constants.dart';
 import 'package:ttms_logistic/Utility/DialogPopup.dart';
 import 'package:ttms_logistic/Utility/ResponceCode.dart';
 import 'package:http/http.dart' as http;
@@ -200,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<Null> evenLogin(String userName, String password) async {
     var url =
-        Uri.parse('https://khounkhamlogistic.com/TTMS/api/authen/login.php');
+        Uri.parse("${API_URL}/TTMS/api/authen/login.php");
     var response = await http.post(
       url,
       body: json.encode({

@@ -14,6 +14,7 @@ void main() {
 final Map<String, WidgetBuilder> map = {
   '/home': (BuildContext context) => HomePage(),
   '/login': (BuildContext context) => LoginPage(),
+  '/page1':(BuildContext context) => Page1(),
 };
 String initialRoute = '/login';
 

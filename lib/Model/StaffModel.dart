@@ -1,22 +1,22 @@
 import 'package:flutter/foundation.dart';
 
 class StaffModel extends ChangeNotifier {
-  String? staffId;
-  String? staffCode;
-  String? fullName;
-  String? email;
-  String? msisdn;
-  String? roleId;
-  String? status;
-  String? gender;
-  String? birthDay;
-  String? address;
-  String? createDate;
-  String? createBy;
-  String? departmentId;
-  String? branchId;
-  String? modifiedDate;
-  String? modified;
+  String staffId = "";
+  String staffCode = "";
+  String fullName = "";
+  String email = "";
+  String msisdn = "";
+  String roleId = "";
+  String status = "";
+  String gender = "";
+  String birthDay = "";
+  String address = "";
+  String createDate = "";
+  String createBy = "";
+  String departmentId = "";
+  String branchId = "";
+  String modifiedDate = "";
+  String modified = "";
 
   StaffModel.fromJson(Map<String, dynamic> json) {
     staffId = json['staffId'];
@@ -59,22 +59,22 @@ class StaffModel extends ChangeNotifier {
   }
 
   StaffModel({
-    this.staffId,
-    this.staffCode,
-    this.fullName,
-    this.email,
-    this.msisdn,
-    this.roleId,
-    this.status,
-    this.gender,
-    this.birthDay,
-    this.address,
-    this.createDate,
-    this.createBy,
-    this.departmentId,
-    this.branchId,
-    this.modifiedDate,
-    this.modified,
+    staffId,
+    staffCode,
+    fullName,
+    email,
+    msisdn,
+    roleId,
+    status,
+    gender,
+    birthDay,
+    address,
+    createDate,
+    createBy,
+    departmentId,
+    branchId,
+    modifiedDate,
+    modified,
   });
 
   void setInfo(StaffModel staffModel) {

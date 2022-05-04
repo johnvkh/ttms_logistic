@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttms_logistic/Model/StaffModel.dart';
 import 'package:ttms_logistic/Model/UserModel.dart';
 import 'package:ttms_logistic/ProviderClass/StaffProviderModel.dart';
@@ -217,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
     for (var map in respData['info']) {
       setState(() {
         staffModel = StaffModel.fromJson(map);
-        Provider.of<StaffModel>(context, listen: false).setInfo(staffModel);
+        //Provider.of<StaffModel>(context, listen: false).setInfo(staffModel);
       });
     }
     // print("userName=${userModel.fullName}");
@@ -225,13 +226,9 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loadProcessBar = true;
       });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-      // MaterialPageRoute route = MaterialPageRoute(builder: (context) => TEST());
-      // Navigator.pushAndRemoveUntil(context, route, (route) => false);
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString('fullName', staffModel.fullName);
     } else {
       setState(() {
         loadProcessBar = true;

@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   awesome_dialog: ^2.2.1
   flutter_svg: ^1.0.3
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

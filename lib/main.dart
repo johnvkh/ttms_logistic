@@ -6,6 +6,7 @@ import 'package:ttms_logistic/ProviderClass/StaffProviderModel.dart';
 import 'package:ttms_logistic/States/HomePage.dart';
 import 'package:ttms_logistic/States/LoginPage.dart';
 import 'package:ttms_logistic/States/Page1.dart';
+import 'package:ttms_logistic/States/TruckManage/TruckType.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,8 @@ void main() {
 final Map<String, WidgetBuilder> map = {
   '/home': (BuildContext context) => HomePage(),
   '/login': (BuildContext context) => LoginPage(),
-  '/page1':(BuildContext context) => Page1(),
+  '/page1': (BuildContext context) => Page1(),
+  '/truckType': (BuildContext context) => TruckType(),
 };
 String initialRoute = '/login';
 

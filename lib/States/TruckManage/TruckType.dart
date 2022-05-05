@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttms_logistic/Components/SearchField.dart';
 import 'package:ttms_logistic/Components/SideMenu.dart';
-import 'package:ttms_logistic/Model/StaffModel.dart';
-import 'package:ttms_logistic/Model/UserModel.dart';
-import 'package:ttms_logistic/ProviderClass/StaffProviderModel.dart';
-import 'package:ttms_logistic/States/LoginPage.dart';
 import 'package:ttms_logistic/Utility/Constants.dart';
+import 'package:ttms_logistic/Utility/Responsive.dart';
 
-class HomePage extends StatefulWidget {
+class TruckType extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _TruckTypeState createState() => _TruckTypeState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TruckTypeState extends State<TruckType> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   String fullName = "";
-
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +31,6 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,9 +39,9 @@ class _HomePageState extends State<HomePage> {
       body: ScreenTypeLayout(
         desktop: DesktopWidget(fullName: fullName, scaffoldKey: _scaffoldKey),
         tablet:
-            MobileTabletWidget(fullName: fullName, scaffoldKey: _scaffoldKey),
+        MobileTabletWidget(fullName: fullName, scaffoldKey: _scaffoldKey),
         mobile:
-            MobileTabletWidget(fullName: fullName, scaffoldKey: _scaffoldKey),
+        MobileTabletWidget(fullName: fullName, scaffoldKey: _scaffoldKey),
       ),
     );
   }
@@ -149,8 +142,8 @@ class DesktopWidget extends StatelessWidget {
                       ),
                       Text("Dashboard",
                           style: Theme.of(context).textTheme.headline6),
-                      //Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                      // Expanded(child: SearchField()),
+                      Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                      Expanded(child: SearchField()),
                       // ProfileCard()
                     ],
                   ),

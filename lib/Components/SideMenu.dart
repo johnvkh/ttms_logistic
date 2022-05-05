@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -9,75 +11,86 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: SingleChildScrollView(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Image.asset("assets/images/logo.png"),
-            ),
-            ExpansionTile(
-              title: Text(
-                "Title",
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+      child: ListView(
+        children: [
+          DrawerHeader(
+            child: Image.asset("assets/images/logo.png"),
+          ),
+          Column(
+            children: [
+              DrawerListTile(
+                title: "ໜ້າຫຼັກ",
+                svgSrc: "assets/icons/menu_dashbord.svg",
+                press: () {},
               ),
-              children: <Widget>[
+              if (1 == 1)
                 ExpansionTile(
-                  title: Text(
-                    'Sub title',
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  title: const Text("ຈັດການຂໍມູນລົດບັນທຸກ", style: TextStyle(),),
+                  leading: Icon(
+                    FontAwesomeIcons.truck,
+                    size: 17,
                   ),
                   children: <Widget>[
                     ListTile(
-                      title: Text('data'),
+                      title: DrawerListTile(
+                        title: "ປະເພດລົດບັນທຸກ",
+                        svgSrc: "assets/icons/menu_dashbord.svg",
+                        press: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/truckType', (route) => false);
+                        },
+                      ),
                     )
                   ],
                 ),
-                ListTile(
-                  title: Text('data'),
-                )
-              ],
-            ),
-            DrawerListTile(
-              title: "Dashboard",
-              svgSrc: "assets/icons/menu_dashbord.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Transaction",
-              svgSrc: "assets/icons/menu_tran.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Task",
-              svgSrc: "assets/icons/menu_task.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Documents",
-              svgSrc: "assets/icons/menu_doc.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Store",
-              svgSrc: "assets/icons/menu_store.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Notification",
-              svgSrc: "assets/icons/menu_notification.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Profile",
-              svgSrc: "assets/icons/menu_profile.svg",
-              press: () {},
-            ),
-            DrawerListTile(
-              title: "Settings",
-              svgSrc: "assets/icons/menu_setting.svg",
-              press: () {},
-            ),
-          ],
-        ),
+              DrawerListTile(
+                title: "Transaction",
+                svgSrc: "assets/icons/menu_tran.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Task",
+                svgSrc: "assets/icons/menu_task.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Documents",
+                svgSrc: "assets/icons/menu_doc.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Store",
+                svgSrc: "assets/icons/menu_store.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Notification",
+                svgSrc: "assets/icons/menu_notification.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Profile",
+                svgSrc: "assets/icons/menu_profile.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: "Settings",
+                svgSrc: "assets/icons/menu_setting.svg",
+                press: () {},
+              ),
+              ListTile(
+                horizontalTitleGap: 0,
+                title: Text("ຈັດການຂໍ້ມູນທົ່ວໄປ"),
+                leading: Icon(
+                  FontAwesomeIcons.user,
+                  size: 17,
+                ),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -229,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString('fullName', staffModel.fullName);
+      sharedPreferences.setString('StaffCode',staffModel.staffCode);
     } else {
       setState(() {
         loadProcessBar = true;

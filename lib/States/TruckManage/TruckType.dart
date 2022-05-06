@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ttms_logistic/Components/SearchField.dart';
+import 'package:ttms_logistic/Components/Footer.dart';
+import 'package:ttms_logistic/Components/Navbar.dart';
 import 'package:ttms_logistic/Components/SideMenu.dart';
 import 'package:ttms_logistic/Utility/Constants.dart';
 import 'package:ttms_logistic/Utility/Responsive.dart';
+import 'package:ttms_logistic/Utility/WidgetUtility.dart';
 
 class TruckType extends StatefulWidget {
   @override
@@ -70,19 +72,7 @@ class MobileTabletWidget extends StatelessWidget {
               flex: 5,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: () =>
-                            _scaffoldKey.currentState?.openDrawer(),
-                      ),
-                      Expanded(
-                        child: SearchField(),
-                      ),
-                      // ProfileCard()
-                    ],
-                  ),
+                  Navbar(scaffoldKey: _scaffoldKey),
                   SizedBox(height: defaultPadding),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,6 +81,16 @@ class MobileTabletWidget extends StatelessWidget {
                         flex: 5,
                         child: Column(
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: TextWidget("ຈັດການຂໍ້ມູນປະເພກລົດບັນທຸກ",
+                                      Colors.black54, 20, FontWeight.bold),
+                                ),
+                              ],
+                            ),
                             // MyFiles(),
                             // SizedBox(height: defaultPadding),
                             // RecentFiles(),
@@ -100,7 +100,8 @@ class MobileTabletWidget extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  Footer(),
                 ],
               ),
             ),
@@ -133,41 +134,43 @@ class DesktopWidget extends StatelessWidget {
               padding: EdgeInsets.all(defaultPadding),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: () =>
-                            _scaffoldKey.currentState?.openDrawer(),
-                      ),
-                      Text("Dashboard",
-                          style: Theme.of(context).textTheme.headline6),
-                      Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                      Expanded(child: SearchField()),
-                      // ProfileCard()
-                    ],
-                  ),
-                  SizedBox(height: defaultPadding),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Column(
-                          children: [
-                            //MyFiles(),
-                            SizedBox(height: defaultPadding),
-                            //RecentFiles(),
-                          ],
+                  Navbar(scaffoldKey: _scaffoldKey),
+                  const SizedBox(height: defaultPadding),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: secondaryColor,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: TextWidget("ຈັດການຂໍ້ມູນປະເພກລົດບັນທຸກ",
+                                        Colors.black54, 20, FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              //MyFiles(),
+                              SizedBox(height: defaultPadding),
+                              //RecentFiles(),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: defaultPadding),
-                      // Expanded(
-                      //   flex: 2,
-                      //   child: StarageDetails(),
-                      // ),
-                    ],
-                  )
+                        SizedBox(width: defaultPadding),
+                        // Expanded(
+                        //   flex: 2,
+                        //   child: StarageDetails(),
+                        // ),
+                      ],
+                    ),
+                  ),
+                  Footer(),
                 ],
               ),
             ),

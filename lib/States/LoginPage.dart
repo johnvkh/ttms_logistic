@@ -192,45 +192,57 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   )
-                : Center(
-                    child: Lottie.asset("assets/lottie/loading.json",
-                        width: 100, height: 100),
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Lottie.asset("assets/lottie/loading.json",
+                          width: 100, height: 100),
+                    ),
                   )),
       ),
     );
   }
 
   Future<Null> evenLogin(String userName, String password) async {
-    var url =
-        Uri.parse("${API_URL}/TTMS/api/authen/login.php");
-    var response = await http.post(
-      url,
-      body: json.encode({
-        "actionCode": "99868",
-        "actionNodeId": 1,
-        "staffCode": "${userName}",
-        "password": "${password}"
-      }),
-    );
-    print('Response status: ${response.statusCode}');
-    var respData = json.decode(response.body);
-    print("extractedData['list']=${respData['info']}");
-    for (var map in respData['info']) {
-      setState(() {
-        staffModel = StaffModel.fromJson(map);
-        //Provider.of<StaffModel>(context, listen: false).setInfo(staffModel);
-      });
-    }
-    // print("userName=${userModel.fullName}");
-    if (respData['responceCode'] == SUCESSFUL) {
-      setState(() {
-        loadProcessBar = true;
-      });
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setString('fullName', staffModel.fullName);
-      sharedPreferences.setString('StaffCode',staffModel.staffCode);
-    } else {
+    try {
+      var url = Uri.parse("${API_URL}/TTMS/api/authen/login.php");
+      var response = await http.post(
+        url,
+        body: json.encode({
+          "actionCode": "99868",
+          "actionNodeId": 1,
+          "staffCode": "${userName}",
+          "password": "${password}"
+        }),
+      );
+      print('Response status: ${response.statusCode}');
+      var respData = json.decode(response.body);
+      print("extractedData['list']=${respData['info']}");
+      for (var map in respData['info']) {
+        setState(() {
+          staffModel = StaffModel.fromJson(map);
+          //Provider.of<StaffModel>(context, listen: false).setInfo(staffModel);
+        });
+      }
+      // print("userName=${userModel.fullName}");
+      if (respData['responceCode'] == SUCESSFUL) {
+        setState(() {
+          loadProcessBar = true;
+        });
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString('fullName', staffModel.fullName);
+        sharedPreferences.setString('StaffCode', staffModel.staffCode);
+      } else {
+        setState(() {
+          loadProcessBar = true;
+        });
+        DialogFail(
+            context, "Notification!", "system error pleace try again!!!");
+      }
+    } catch (error) {
       setState(() {
         loadProcessBar = true;
       });

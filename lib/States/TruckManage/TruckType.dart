@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ttms_logistic/Components/BuildTextField.dart';
 import 'package:ttms_logistic/Components/DefaultButton.dart';
 import 'package:ttms_logistic/Components/Footer.dart';
 import 'package:ttms_logistic/Components/MyFiles.dart';
@@ -87,7 +88,7 @@ class _TruckTypeState extends State<TruckType> {
                                   //     20,
                                   //     FontWeight.bold),
                                   child: Text(
-                                    "ຈັດການຂໍ້ມູນປະເພກລົດບັນທຸກ",
+                                    "ຈັດການຂໍ້ມູນປະເພດລົດບັນທຸກ",
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                   ),
@@ -156,76 +157,6 @@ class _TruckTypeState extends State<TruckType> {
     );
   }
 
-  Widget addTruckTypePanel(
-      BuildContext context,
-      TextEditingController _truckTypeCode,
-      TextEditingController _truckTypeName) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: boxColors,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            )
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 15, top: 10),
-                child: TextWidget(
-                  "ເພີ່ມປະເພກລົດບັນທຸກ",
-                  Colors.black54,
-                  20,
-                  FontWeight.bold,
-                  TextAlign.start,
-                ),
-              ),
-            ],
-          ),
-          DividerWidget(),
-          SizedBox(height: defaultPadding),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-              children: [
-                buildTextField(
-                    content: "ລະຫັດປະເພດລົດບັນທຸກ",
-                    textControl: _truckTypeCode),
-                const SizedBox(
-                  width: 30,
-                ),
-                buildTextField(
-                    content: "ຊື່ປະເພດລົດບັນທຸກ", textControl: _truckTypeName),
-                Expanded(
-                  child: SizedBox(height: defaultPadding),
-                ),
-                DefaultButton(
-                  width: 100,
-                  height: 40,
-                  press: () {},
-                  text: "ບັນທຶກ",
-                ),
-              ],
-            ),
-          ),
-
-          //MyFiles(),
-          SizedBox(height: defaultPadding),
-          //RecentFiles(),
-        ],
-      ),
-    );
-  }
-
   Widget tableTruckTypePanel(
       BuildContext context,
       TextEditingController _truckTypeCode,
@@ -233,7 +164,7 @@ class _TruckTypeState extends State<TruckType> {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: boxColors,
+          color: panelColors,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -311,52 +242,102 @@ class _TruckTypeState extends State<TruckType> {
       ),
     );
   }
-}
 
-class buildTextField extends StatelessWidget {
-  const buildTextField({
-    Key? key,
-    required this.content,
-    required TextEditingController textControl,
-  })  : _textControl = textControl,
-        super(key: key);
-
-  final TextEditingController _textControl;
-  final String content;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget addTruckTypePanel(
+      BuildContext context,
+      TextEditingController _truckTypeCode,
+      TextEditingController _truckTypeName) {
+    return Column(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.15,
-          height: 40.0,
-          child: TextField(
-            maxLines: 1,
-            controller: _textControl,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(10.0),
-              labelStyle: const TextStyle(
-                color: Colors.grey,
-                fontFamily: 'NotoSansLao',
-              ),
-              labelText: content,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: Colors.grey,
-                ),
-              ),
+          width: MediaQuery.of(context).size.width,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(0, 123, 255, 1),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(5),
+              topLeft: Radius.circular(5),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              )
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  "Quick Example",
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(255, 255, 255, 1),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(5),
+              bottomRight: Radius.circular(5),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              )
+            ],
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 30,
+              ),
+              BuildTextField(
+                content: "ລະຫັດປະເພດລົດບັນທຸກ",
+                textControl: _truckTypeCode,
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              BuildTextField(
+                content: "ຊື່ປະເພດລົດບັນທຸກ",
+                textControl: _truckTypeName,
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              Expanded(
+                child: SizedBox(height: defaultPadding),
+              ),
+              DefaultButton(
+                width: 100,
+                height: 40,
+                press: () {
+                  print("_truckTypeName=${_truckTypeName.text}");
+                  print("_truckTypeCode=${_truckTypeCode.text}");
+                },
+                text: "ບັນທຶກ",
+              ),
+              SizedBox(
+                width: 30,
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 }
+

@@ -7,6 +7,7 @@ import 'package:ttms_logistic/States/HomePage.dart';
 import 'package:ttms_logistic/States/LoginPage.dart';
 import 'package:ttms_logistic/States/Page1.dart';
 import 'package:ttms_logistic/States/TruckManage/TruckType.dart';
+import 'package:ttms_logistic/States/testComponent.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,8 +18,10 @@ final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => LoginPage(),
   '/page1': (BuildContext context) => Page1(),
   '/truckType': (BuildContext context) => TruckType(),
+  '/testComponent': (BuildContext context) => TextComponent(),
 };
 String initialRoute = '/login';
+// String initialRoute = '/testComponent';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

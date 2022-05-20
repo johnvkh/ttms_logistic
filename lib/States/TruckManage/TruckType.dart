@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -8,9 +10,13 @@ import 'package:ttms_logistic/Components/Footer.dart';
 import 'package:ttms_logistic/Components/MyFiles.dart';
 import 'package:ttms_logistic/Components/Navbar.dart';
 import 'package:ttms_logistic/Components/SideMenu.dart';
+import 'package:ttms_logistic/Model/TruckTypeModel.dart';
 import 'package:ttms_logistic/Utility/Constants.dart';
+import 'package:ttms_logistic/Utility/DialogPopup.dart';
+import 'package:ttms_logistic/Utility/ResponceCode.dart';
 import 'package:ttms_logistic/Utility/Responsive.dart';
 import 'package:ttms_logistic/Utility/WidgetUtility.dart';
+import 'package:http/http.dart' as http;
 
 class TruckType extends StatefulWidget {
   @override
@@ -20,8 +26,11 @@ class TruckType extends StatefulWidget {
 class _TruckTypeState extends State<TruckType> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String fullName = "";
+  String staffCode = "";
   final TextEditingController _truckTypeCode = new TextEditingController();
   final TextEditingController _truckTypeName = new TextEditingController();
+
+  late TruckTypeModel truckTypeModel;
 
   @override
   void initState() {
@@ -34,6 +43,7 @@ class _TruckTypeState extends State<TruckType> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       fullName = preferences.getString('fullName')!;
+      staffCode = preferences.getString('StaffCode')!;
     });
 
     if (fullName == "" || fullName.isEmpty) {
@@ -195,46 +205,6 @@ class _TruckTypeState extends State<TruckType> {
           DividerWidget(),
           SizedBox(height: defaultPadding),
 
-          Center(
-              child: Column(children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(20),
-              child: Table(
-                defaultColumnWidth: FixedColumnWidth(120.0),
-                border: TableBorder.all(
-                    color: Colors.black, style: BorderStyle.solid, width: 2),
-                children: [
-                  TableRow(children: [
-                    Column(children: [
-                      Text('Website', style: TextStyle(fontSize: 20.0))
-                    ]),
-                    Column(children: [
-                      Text('Tutorial', style: TextStyle(fontSize: 20.0))
-                    ]),
-                    Column(children: [
-                      Text('Review', style: TextStyle(fontSize: 20.0))
-                    ]),
-                  ]),
-                  TableRow(children: [
-                    Column(children: [Text('Javatpoint')]),
-                    Column(children: [Text('Flutter')]),
-                    Column(children: [Text('5*')]),
-                  ]),
-                  TableRow(children: [
-                    Column(children: [Text('Javatpoint')]),
-                    Column(children: [Text('MySQL')]),
-                    Column(children: [Text('5*')]),
-                  ]),
-                  TableRow(children: [
-                    Column(children: [Text('Javatpoint')]),
-                    Column(children: [Text('ReactJS')]),
-                    Column(children: [Text('5*')]),
-                  ]),
-                ],
-              ),
-            ),
-          ])),
-
           //MyFiles(),
           SizedBox(height: defaultPadding),
           //RecentFiles(),
@@ -273,7 +243,7 @@ class _TruckTypeState extends State<TruckType> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  "Quick Example",
+                  "ເພີ່ມປະເພດລົດບັນທຸກ",
                   style: TextStyle(color: Colors.white),
                   textAlign: TextAlign.start,
                 ),
@@ -283,7 +253,6 @@ class _TruckTypeState extends State<TruckType> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          height: 100,
           decoration: BoxDecoration(
             color: Color.fromRGBO(255, 255, 255, 1),
             borderRadius: BorderRadius.only(
@@ -325,6 +294,7 @@ class _TruckTypeState extends State<TruckType> {
                 width: 100,
                 height: 40,
                 press: () {
+                  InsertTruckType(_truckTypeCode.text, _truckTypeName.text);
                   print("_truckTypeName=${_truckTypeName.text}");
                   print("_truckTypeCode=${_truckTypeCode.text}");
                 },
@@ -332,6 +302,7 @@ class _TruckTypeState extends State<TruckType> {
               ),
               SizedBox(
                 width: 30,
+                height: 100,
               ),
             ],
           ),
@@ -339,5 +310,47 @@ class _TruckTypeState extends State<TruckType> {
       ],
     );
   }
-}
 
+  Future<Null> InsertTruckType(
+      String actionNodeId, String truckTypeCode) async {
+    try {
+      var url =
+          Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
+      var response = await http.post(
+        url,
+        body: json.encode({
+          "actionCode": "99997",
+          "actionNodeId": 2,
+          "truckTypeCode": "${actionNodeId}",
+          "truckTypeName": "${truckTypeCode}",
+          "tireLifeKm": 70000,
+          "tireLifeDay": 550,
+          "countWheels": 10,
+          "createBy": "${staffCode}",
+        }),
+      );
+      print('Response status: ${response.statusCode}');
+      var respData = json.decode(response.body);
+      print('Response: ${respData}');
+      print("Response code: ${respData['responseCode']}");
+      print("SESSION_EXPRIE: ${SESSION_EXPRIE}");
+
+      if (respData['responseCode'] == SUCESSFUL) {
+        DialogFail(context, "Notification!", "ເພີ່ມປະເພດລົດສຳເລັດ!!!");
+      } else if (respData['responseCode'] == SESSION_EXPRIE) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else {
+        // setState(() {
+        //   loadProcessBar = true;
+        // });
+        DialogFail(
+            context, "Notification!", "system error pleace try again!!!=======");
+      }
+    } catch (error) {
+      // setState(() {
+      //   loadProcessBar = true;
+      // });
+      DialogFail(context, "Notification!", "system error pleace try again!!!111111111");
+    }
+  }
+}

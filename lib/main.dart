@@ -18,10 +18,10 @@ final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => LoginPage(),
   '/page1': (BuildContext context) => Page1(),
   '/truckType': (BuildContext context) => TruckType(),
-  '/testComponent': (BuildContext context) => TextComponent(),
+  '/testComponent': (BuildContext context) => PaginatedDataTableDemo(),
 };
-String initialRoute = '/login';
-// String initialRoute = '/testComponent';
+// String initialRoute = '/login';
+String initialRoute = '/testComponent';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),
+        home: PaginatedDataTableDemo(),
       ),
     );
   }

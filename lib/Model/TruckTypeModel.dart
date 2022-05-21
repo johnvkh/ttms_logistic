@@ -10,17 +10,20 @@ class TruckTypeModel {
   String? updateBy;
   String? updateDate;
 
-  TruckTypeModel(
-      {this.truckTypeId,
-        this.truckTypeCode,
-        this.truckTypeName,
-        this.tireLifeKm,
-        this.tireLifeDay,
-        this.numberOfWheels,
-        this.createBy,
-        this.createDate,
-        this.updateBy,
-        this.updateDate});
+  bool selected = false;
+
+  TruckTypeModel({
+    truckTypeId,
+    truckTypeCode,
+    truckTypeName,
+    tireLifeKm,
+    tireLifeDay,
+    numberOfWheels,
+    createBy,
+    createDate,
+    updateBy,
+    updateDate,
+  });
 
   TruckTypeModel.fromJson(Map<String, dynamic> json) {
     truckTypeId = json['truckTypeId'];

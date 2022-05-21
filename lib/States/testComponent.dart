@@ -1,5 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ttms_logistic/Model/DataSources.dart';
+import 'package:ttms_logistic/Model/TruckTypeModel.dart';
+import 'package:ttms_logistic/Utility/Constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:ttms_logistic/Utility/DialogPopup.dart';
+
+import '../Utility/ResponceCode.dart';
 
 
 class PaginatedDataTableDemo extends StatefulWidget {
@@ -10,12 +18,11 @@ class PaginatedDataTableDemo extends StatefulWidget {
 
 class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo>
     with RestorationMixin {
-  final RestorableDessertSelections _dessertSelections = RestorableDessertSelections();
   final RestorableInt _rowIndex = RestorableInt(0);
   final RestorableInt _rowsPerPage = RestorableInt(PaginatedDataTable.defaultRowsPerPage);
-  // final RestorableBool _sortAscending = RestorableBool(true);
-  // final RestorableIntN _sortColumnIndex = RestorableIntN(null);
   late DessertDataSource _dessertsDataSource;
+  List<TruckTypeModel> listTruckType = <TruckTypeModel>[];
+  late TruckTypeModel truckTypeModel;
   bool initialized = false;
 
   @override
@@ -23,41 +30,47 @@ class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(_dessertSelections, 'selected_row_indices');
     registerForRestoration(_rowIndex, 'current_row_index');
     registerForRestoration(_rowsPerPage, 'rows_per_page');
-    // registerForRestoration(_sortAscending, 'sort_ascending');
-    // registerForRestoration(_sortColumnIndex, 'sort_column_index');
+  }
 
-    // if (!initialized) {
-    //   _dessertsDataSource = DessertDataSource(context);
-    //   initialized = true;
-    // }
-    // switch (_sortColumnIndex.value) {
-    //   case 0:
-    //     _dessertsDataSource.sort<String>((d) => d.name, _sortAscending.value);
-    //     break;
-    //   case 1:
-    //     _dessertsDataSource.sort<num>((d) => d.calories, _sortAscending.value);
-    //     break;
-    //   case 2:
-    //     _dessertsDataSource.sort<num>((d) => d.fat, _sortAscending.value);
-    //     break;
-    //   case 3:
-    //     _dessertsDataSource.sort<num>((d) => d.carbs, _sortAscending.value);
-    //     break;
-    //   case 4:
-    //     _dessertsDataSource.sort<num>((d) => d.protein, _sortAscending.value);
-    //     break;
-    //   case 5:
-    //     _dessertsDataSource.sort<num>((d) => d.sodium, _sortAscending.value);
-    //     break;
-    //   case 6:
-    //     _dessertsDataSource.sort<num>((d) => d.calcium, _sortAscending.value);
-    //     break;
-    // }
-    // _dessertsDataSource.updateSelectedDesserts(_dessertSelections);
-    // _dessertsDataSource.addListener(_updateSelectedDessertRowListener);
+  @override
+  void initState() {
+    super.initState();
+    loadTruckType();
+  }
+  Future<Null> loadTruckType()async{
+    try {
+      var url =
+      Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
+      var response = await http.post(
+        url,
+        body: json.encode({
+          "actionCode": "99999",
+          "actionNodeId": 1,
+        }),
+      );
+      var respData = json.decode(response.body);
+      print('Response: ${respData}');
+
+      if (respData['responseCode'] == SUCESSFUL) {
+        for (var map in respData['data']) {
+          setState(() {
+            truckTypeModel = TruckTypeModel.fromJson(map);
+            listTruckType.add(truckTypeModel);
+          });
+        }
+
+        DialogFail(context, "Notification!", "ເພີ່ມປະເພດລົດສຳເລັດ!!!");
+      } else if (respData['responseCode'] == SESSION_EXPRIE) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else {
+        DialogFail(
+            context, "Notification!", "system error pleace try again!!!=======");
+      }
+    } catch (error) {
+      DialogFail(context, "Notification!", "system error pleace try again!!!111111111");
+    }
   }
 
   @override
@@ -67,31 +80,17 @@ class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo>
       _dessertsDataSource = DessertDataSource(context);
       initialized = true;
     }
-    _dessertsDataSource.addListener(_updateSelectedDessertRowListener);
+    // _dessertsDataSource.addListener(_updateSelectedDessertRowListener);
   }
 
-  void _updateSelectedDessertRowListener() {
-    _dessertSelections.setDessertSelections(_dessertsDataSource.desserts);
-  }
-
-  void sort<T>(
-      Comparable<T> Function(Dessert d) getField,
-      int columnIndex,
-      bool ascending,
-      ) {
-    _dessertsDataSource.sort<T>(getField, ascending);
-    setState(() {
-      // _sortColumnIndex.value = columnIndex;
-      // _sortAscending.value = ascending;
-    });
-  }
+  // void _updateSelectedDessertRowListener() {
+  //   //   _dessertSelections.setDessertSelections(listTruckType);
+  //   // }
 
   @override
   void dispose() {
     _rowsPerPage.dispose();
-    // _sortColumnIndex.dispose();
-    // _sortAscending.dispose();
-    _dessertsDataSource.removeListener(_updateSelectedDessertRowListener);
+    // _dessertsDataSource.removeListener(_updateSelectedDessertRowListener);
     _dessertsDataSource.dispose();
     super.dispose();
   }
@@ -118,46 +117,31 @@ class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo>
           },
           columns: [
             DataColumn(
-              label: const Text('Desert'),
-              onSort: (columnIndex, ascending) =>
-                  sort<String>((d) => d.name, columnIndex, ascending),
+              label: const Text('truck Type Id'),
             ),
             DataColumn(
-              label: const Text('Calories'),
+              label: const Text('truck Type Code'),
               numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.calories, columnIndex, ascending),
+
             ),
             DataColumn(
-              label: const Text('Fat (gm)'),
+              label: const Text('truck Type Name'),
               numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.fat, columnIndex, ascending),
             ),
             DataColumn(
-              label: const Text('Carbs (gm)'),
+              label: const Text('tire Life Km'),
               numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.carbs, columnIndex, ascending),
             ),
             DataColumn(
-              label: const Text('Protein (gm)'),
+              label: const Text('tire Life Day'),
               numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.protein, columnIndex, ascending),
+
             ),
             DataColumn(
-              label: const Text('Sodium (mg)'),
+              label: const Text('number Of Wheels'),
               numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.sodium, columnIndex, ascending),
             ),
-            DataColumn(
-              label: const Text('Calcium (%)'),
-              numeric: true,
-              onSort: (columnIndex, ascending) =>
-                  sort<num>((d) => d.calcium, columnIndex, ascending),
-            ),
+
           ],
           source: _dessertsDataSource,
         ),

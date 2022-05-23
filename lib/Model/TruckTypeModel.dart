@@ -10,6 +10,8 @@ class TruckTypeModel {
   String? updateBy;
   String? updateDate;
 
+  String colTruckTypeId="ລະຫັດປະເພດລົດ";
+
   bool selected = false;
 
   TruckTypeModel({

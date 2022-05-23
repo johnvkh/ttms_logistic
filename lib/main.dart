@@ -18,7 +18,7 @@ final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => LoginPage(),
   '/page1': (BuildContext context) => Page1(),
   '/truckType': (BuildContext context) => TruckType(),
-  '/testComponent': (BuildContext context) => PaginatedDataTableDemo(),
+  '/testComponent': (BuildContext context) => DataTableDemo(),
 };
 // String initialRoute = '/login';
 String initialRoute = '/testComponent';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: PaginatedDataTableDemo(),
+        home: DataTableDemo(),
       ),
     );
   }

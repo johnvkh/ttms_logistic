@@ -59,9 +59,9 @@ class DessertDataSource extends DataTableSource {
     listTructType = [];
   }
 
-  DessertDataSource(this.context, [sortedByCalories = false, this.hasRowTaps = false, this.hasRowHeightOverrides = false, this.hasZebraStripes = false]) {
+  DessertDataSource(this.context,List<TruckTypeModel> listTruckType) {
     //loadTruckType();
-    //listTructType = _desserts;
+    _desserts = listTruckType;
   }
   void selectAll(bool? checked) {
     for (final dessert in listTructType) {
@@ -240,7 +240,7 @@ class DesertsFakeWebService {
 
 int _selectedCount = 0;
 late TruckTypeModel truckTypeModel;
-// List<TruckTypeModel> _desserts = <TruckTypeModel>[];
+List<TruckTypeModel> _desserts = <TruckTypeModel>[];
 List<TruckTypeModel> _dessertsX3 = listTructType.toList();
 
 _showSnackbar(BuildContext context, String text, [Color? color]) {

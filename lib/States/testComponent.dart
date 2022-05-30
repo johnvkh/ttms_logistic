@@ -6,6 +6,7 @@ import 'package:ttms_logistic/Model/TruckTypeModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:ttms_logistic/Utility/DialogPopup.dart';
 import 'package:ttms_logistic/Utility/ResponceCode.dart';
+import 'package:ttms_logistic/Utility/WidgetUtility.dart';
 
 class DataTableDemo extends StatefulWidget {
   @override
@@ -73,19 +74,95 @@ class _DataTableDemoState extends State<DataTableDemo> {
       appBar: AppBar(
         title: Text('Data Tables'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      // body: Container(
+      //       //   child: ListView(
+      //       //     padding: const EdgeInsets.all(16),
+      //       //     children: [
+      //       //       PaginatedDataTable(
+      //       //         header: Text('Header Text'),
+      //       //         rowsPerPage: rowPerPage,
+      //       //         columns: [
+      //       //           DataColumn(label: Text('Header B')),
+      //       //           DataColumn(label: Text('Header B')),
+      //       //           DataColumn(label: Text('Header C')),
+      //       //           DataColumn(label: Text('Header D')),
+      //       //         ],
+      //       //         source: _DataSource(context, listTruckType),
+      //       //       ),
+      //       //     ],
+      //       //   ),
+      //       // ),
+      body: Column(
         children: [
-          PaginatedDataTable(
-            header: Text('Header Text'),
-            rowsPerPage: rowPerPage,
-            columns: [
-              DataColumn(label: Text('Header B')),
-              DataColumn(label: Text('Header B')),
-              DataColumn(label: Text('Header C')),
-              DataColumn(label: Text('Header D')),
-            ],
-            source: _DataSource(context, listTruckType),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(0, 123, 255, 1),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(5),
+                topLeft: Radius.circular(5),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                )
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: TextWidget(
+                    "ເພີ່ມປະເພດລົດບັນທຸກ",
+                    Colors.white,
+                    16,
+                    FontWeight.bold,
+                    TextAlign.start,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 255, 255, 1),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                )
+              ],
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: PaginatedDataTable(
+                header: Text('Header Text'),
+                rowsPerPage: rowPerPage,
+                columns: [
+                  DataColumn(label: Text('Header B')),
+                  DataColumn(label: Text('Header B')),
+                  DataColumn(label: Text('Header C')),
+                  DataColumn(label: Text('Header D')),
+                ],
+                source: _DataSource(context, listTruckType),
+              ),
+            ),
           ),
         ],
       ),

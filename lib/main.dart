@@ -20,8 +20,8 @@ final Map<String, WidgetBuilder> map = {
   '/truckType': (BuildContext context) => TruckType(),
   '/testComponent': (BuildContext context) => DataTableDemo(),
 };
-// String initialRoute = '/login';
-String initialRoute = '/testComponent';
+String initialRoute = '/login';
+// String initialRoute = '/testComponent';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: DataTableDemo(),
+        home: LoginPage(),
       ),
     );
   }

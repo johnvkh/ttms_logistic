@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ttms_logistic/Components/DefaultButton.dart';
+import '../Components/Button/DefaultButton.dart';
 import 'package:ttms_logistic/Components/Footer.dart';
 import 'package:ttms_logistic/Components/MyFiles.dart';
 import 'package:ttms_logistic/Components/Navbar.dart';

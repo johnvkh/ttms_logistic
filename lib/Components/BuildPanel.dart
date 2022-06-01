@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttms_logistic/Components/DefaultButton.dart';
+import 'Button/DefaultButton.dart';
 import 'package:ttms_logistic/Utility/Constants.dart';
 
 class BuildPanel extends StatelessWidget {

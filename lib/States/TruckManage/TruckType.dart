@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttms_logistic/Components/BuildTextField.dart';
-import 'package:ttms_logistic/Components/DefaultButton.dart';
+import '../../Components/Button/DefaultButton.dart';
 import 'package:ttms_logistic/Components/Footer.dart';
 import 'package:ttms_logistic/Components/MyFiles.dart';
 import 'package:ttms_logistic/Components/Navbar.dart';
@@ -32,6 +34,7 @@ class _TruckTypeState extends State<TruckType> {
   List<TruckTypeModel> listTruckType = <TruckTypeModel>[];
   late TruckTypeModel truckTypeModel;
   int rowPerPage = 1;
+  bool loadProcessBar = true;
 
   @override
   void initState() {
@@ -53,10 +56,54 @@ class _TruckTypeState extends State<TruckType> {
     }
   }
 
+  Future<Null> InsertTruckType(
+      String actionNodeId, String truckTypeCode) async {
+    try {
+      var url =
+          Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
+      var response = await http.post(
+        url,
+        body: json.encode({
+          "actionCode": "99997",
+          "actionNodeId": 2,
+          "truckTypeCode": "${actionNodeId}",
+          "truckTypeName": "${truckTypeCode}",
+          "tireLifeKm": 0,
+          "tireLifeDay": 0,
+          "countWheels": 0,
+          "createBy": "${staffCode}",
+        }),
+      );
+      print('Response status: ${response.statusCode}');
+      var respData = json.decode(response.body);
+      print('Response: ${respData}');
+      print("Response code: ${respData['responseCode']}");
+      print("SESSION_EXPRIE: ${SESSION_EXPRIE}");
+
+      if (respData['responseCode'] == SUCESSFUL) {
+        DialogFail(context, "Notification!", "ເພີ່ມປະເພດລົດສຳເລັດ!!!");
+      } else if (respData['responseCode'] == SESSION_EXPRIE) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else {
+        // setState(() {
+        //   loadProcessBar = true;
+        // });
+        DialogFail(context, "Notification!",
+            "system error pleace try again!!!=======");
+      }
+    } catch (error) {
+      // setState(() {
+      //   loadProcessBar = true;
+      // });
+      DialogFail(context, "Notification!",
+          "system error pleace try again!!!111111111");
+    }
+  }
+
   Future<Null> loadTruckType() async {
     try {
       var url =
-      Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
+          Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
       var response = await http.post(
         url,
         body: json.encode({
@@ -107,7 +154,7 @@ class _TruckTypeState extends State<TruckType> {
           context,
           _truckTypeCode,
           _truckTypeName,
-            listTruckType,
+          listTruckType,
         ),
         tablet: MobileTabletWidget(),
         mobile: MobileTabletWidget(),
@@ -146,10 +193,7 @@ class _TruckTypeState extends State<TruckType> {
                                   child: Text(
                                     "ຈັດການຂໍ້ມູນປະເພດລົດບັນທຸກ",
                                     style:
-                                    Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headline6,
+                                        Theme.of(context).textTheme.headline6,
                                   ),
                                 ),
                               ],
@@ -175,7 +219,8 @@ class _TruckTypeState extends State<TruckType> {
     );
   }
 
-  Widget DesktopWidget(BuildContext context,
+  Widget DesktopWidget(
+      BuildContext context,
       TextEditingController _truckTypeCode,
       TextEditingController _truckTypeName,
       List<TruckTypeModel> listTruckType) {
@@ -204,7 +249,17 @@ class _TruckTypeState extends State<TruckType> {
                 SizedBox(height: defaultPadding),
                 addTruckTypePanel(context, _truckTypeCode, _truckTypeName),
                 SizedBox(height: defaultPadding),
-                tableTruckTypePanel(context,listTruckType),
+
+                loadProcessBar
+                    ? tableTruckTypePanel(context, listTruckType)
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Center(
+                          child: Lottie.asset("assets/lottie/loading.json",
+                              width: 100, height: 100),
+                        ),
+                      ),
                 SizedBox(height: defaultPadding),
                 Footer(),
               ],
@@ -215,14 +270,12 @@ class _TruckTypeState extends State<TruckType> {
     );
   }
 
-  Widget tableTruckTypePanel(BuildContext context,List<TruckTypeModel>listTruckType) {
+  Widget tableTruckTypePanel(
+      BuildContext context, List<TruckTypeModel> listTruckType) {
     return Column(
       children: [
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           height: 50,
           decoration: BoxDecoration(
             color: Color.fromRGBO(0, 123, 255, 1),
@@ -256,10 +309,7 @@ class _TruckTypeState extends State<TruckType> {
           ),
         ),
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Color.fromRGBO(255, 255, 255, 1),
             borderRadius: BorderRadius.only(
@@ -281,10 +331,14 @@ class _TruckTypeState extends State<TruckType> {
               // header: Text('Header Text'),
               rowsPerPage: rowPerPage,
               columns: [
-                DataColumn(label: Text('Header B')),
-                DataColumn(label: Text('Header B')),
-                DataColumn(label: Text('Header C')),
-                DataColumn(label: Text('Header D')),
+                DataColumn(
+                  label: Text("ລຳດັບ"),
+                ),
+                DataColumn(label: Text("ລະຫັດປະເພດລົດ")),
+                DataColumn(label: Text("ຊື່ປະເພດລະຫັດ")),
+                DataColumn(
+                  label: Text(""),
+                ),
               ],
               source: TruckTypeDataSource(context, listTruckType),
             ),
@@ -294,16 +348,14 @@ class _TruckTypeState extends State<TruckType> {
     );
   }
 
-  Widget addTruckTypePanel(BuildContext context,
+  Widget addTruckTypePanel(
+      BuildContext context,
       TextEditingController _truckTypeCode,
       TextEditingController _truckTypeName) {
     return Column(
       children: [
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           height: 50,
           decoration: BoxDecoration(
             color: Color.fromRGBO(0, 123, 255, 1),
@@ -337,10 +389,7 @@ class _TruckTypeState extends State<TruckType> {
           ),
         ),
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Color.fromRGBO(255, 255, 255, 1),
             borderRadius: BorderRadius.only(
@@ -398,58 +447,13 @@ class _TruckTypeState extends State<TruckType> {
       ],
     );
   }
-
-  Future<Null> InsertTruckType(String actionNodeId,
-      String truckTypeCode) async {
-    try {
-      var url =
-      Uri.parse("${API_URL}/TTMS/api/basic_information/trucktype.php");
-      var response = await http.post(
-        url,
-        body: json.encode({
-          "actionCode": "99997",
-          "actionNodeId": 2,
-          "truckTypeCode": "${actionNodeId}",
-          "truckTypeName": "${truckTypeCode}",
-          "tireLifeKm": 0,
-          "tireLifeDay": 0,
-          "countWheels": 0,
-          "createBy": "${staffCode}",
-        }),
-      );
-      print('Response status: ${response.statusCode}');
-      var respData = json.decode(response.body);
-      print('Response: ${respData}');
-      print("Response code: ${respData['responseCode']}");
-      print("SESSION_EXPRIE: ${SESSION_EXPRIE}");
-
-      if (respData['responseCode'] == SUCESSFUL) {
-        DialogFail(context, "Notification!", "ເພີ່ມປະເພດລົດສຳເລັດ!!!");
-      } else if (respData['responseCode'] == SESSION_EXPRIE) {
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-      } else {
-        // setState(() {
-        //   loadProcessBar = true;
-        // });
-        DialogFail(context, "Notification!",
-            "system error pleace try again!!!=======");
-      }
-    } catch (error) {
-      // setState(() {
-      //   loadProcessBar = true;
-      // });
-      DialogFail(context, "Notification!",
-          "system error pleace try again!!!111111111");
-    }
-  }
 }
-
 
 class TruckTypeDataSource extends DataTableSource {
   List<TruckTypeModel> lists = <TruckTypeModel>[];
 
-  TruckTypeDataSource(BuildContext context, List<TruckTypeModel> listTruckType) {
-    print("================${listTruckType.length}");
+  TruckTypeDataSource(
+      BuildContext context, List<TruckTypeModel> listTruckType) {
     lists = listTruckType;
   }
 
@@ -463,23 +467,32 @@ class TruckTypeDataSource extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       selected: row.selected,
-      // onSelectChanged: (value) {
-      //   if (row.selected != value) {
-      //     _selectedCount += value! ? 1 : -1;
-      //     assert(_selectedCount >= 0);
-      //     row.selected = value;
-      //     notifyListeners();
-      //   }
-      // },
       cells: [
-        DataCell(Text(row.truckTypeId.toString())),
+        DataCell(Expanded(child: Text(row.truckTypeId.toString()))),
         DataCell(Text(row.truckTypeCode.toString())),
         DataCell(Text(row.truckTypeName.toString())),
-        DataCell(RaisedButton(
-          onPressed: () {
-            print("====${row.truckTypeId.toString()}");
-          },
-          child: Text("Save"),
+        DataCell(Row(
+          children: [
+            IconButton(
+              color: Colors.blue,
+              onPressed: () {},
+              icon: Icon(
+                FontAwesomeIcons.edit,
+                size: 17,
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            IconButton(
+              color: Colors.red,
+              onPressed: () {},
+              icon: Icon(
+                FontAwesomeIcons.trash,
+                size: 17,
+              ),
+            ),
+          ],
         )),
       ],
     );
